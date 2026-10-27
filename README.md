@@ -32,4 +32,9 @@ The goal is to establish a reliable RGB-D sensing system for future robotics app
 - TBD
 
 
-your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+### Roadmap
+1. implement 2D LiDAR SLAM (using `slam_toolbox`) and 3D obstacle perception with the D455f camera.
+2. utilize RTAB-Map to perform joint mapping and localization by fusing RGB-D and LiDAR data.
+3. integrate the mobile base, odometry, and the Nav2 stack to achieve autonomous navigation.
+
+Throughout the development process, it is also necessary to address coordinate transformations (TF), sensor calibration, data fusion, perception, and performance optimization for the Jetson platform.
