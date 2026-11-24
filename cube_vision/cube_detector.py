@@ -18,7 +18,7 @@ import numpy as np
 import message_filters
 import rclpy
 from cv_bridge import CvBridge, CvBridgeError
-from geometry_msgs.msg import Point, Pose, PoseArray, Quaternion
+from geometry_msgs.msg import Point, Pose, PoseArray, Quaternion, PointStamped
 from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
 from sensor_msgs.msg import CameraInfo, Image
@@ -66,6 +66,7 @@ class CubeDetector(Node):
         self.json_pub = self.create_publisher(String, '/cube_detections', 10)
         self.positions_pub = self.create_publisher(PoseArray, '/cube_positions', 10)
         self.get_logger().info('Cube detector started; waiting for RGB, aligned depth and CameraInfo.')
+        self.point_pub = self.create_publisher(PointStamped, '/cube_positions/cube_point', 10)
 
     def on_camera_info(self, msg):
         self.cam_info = msg
@@ -159,6 +160,14 @@ class CubeDetector(Node):
                 results.append(result)
                 poses.poses.append(Pose(position=Point(x=x, y=y, z=z),
                                         orientation=Quaternion(w=1.0)))
+
+                # Publish the 3D position of the cube
+                point_msg = PointStamped()
+                point_msg.header = rgb_msg.header
+                point_msg.point.x = float(x)
+                point_msg.point.y = float(y)
+                point_msg.point.z = float(z)
+                self.point_pub.publish(point_msg)
 
                 cv2.drawContours(overlay, [contour], -1, (0, 255, 255), 2)
                 cv2.circle(overlay, (u, v), 4, (255, 255, 255), -1)
