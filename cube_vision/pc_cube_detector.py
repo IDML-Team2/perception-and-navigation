@@ -37,14 +37,14 @@ COLOR_RANGES = {
     'blue': [((90, 80, 60), (130, 255, 255))],
     'yellow': [((18, 80, 80), (35, 255, 255))],
 }
-MIN_AREA_PX = 500
+MIN_AREA_PX = 150
 MIN_DEPTH_M = 0.20
 MAX_DEPTH_M = 6.00
 
 # Local point cloud settings. Only HSV-detected contours are back-projected.
-CLOUD_DOWNSAMPLE = 3            # 1 point per 3x3 image pixels (roughly)
+CLOUD_DOWNSAMPLE = 1            # 1 point per 3x3 image pixels (roughly)
 CLOUD_EVERY_N_FRAMES = 3        # ~10 Hz if the camera is running at 30 FPS
-CLOUD_DEPTH_TOLERANCE_M = 0.08  # reject depths >8 cm from the object's median
+CLOUD_DEPTH_TOLERANCE_M = 0.015  # reject depths >8 cm from the object's median
 MIN_CLOUD_VALID_PIXELS = 10     # ignore very sparse / unreliable ROI depth
 
 
@@ -222,7 +222,7 @@ class CubeDetector(Node):
 
                 # Publish the 3D position of the cube
                 point_msg = PointStamped()
-                point_msg.header = rgb_msg.header
+                point_msg.header = poses.header
                 point_msg.point.x = float(x)
                 point_msg.point.y = float(y)
                 point_msg.point.z = float(z)
